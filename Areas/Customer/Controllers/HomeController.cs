@@ -1,5 +1,5 @@
 ﻿using BookStore.Models;
-using BookStore.Models.Models;
+using BookStore.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
