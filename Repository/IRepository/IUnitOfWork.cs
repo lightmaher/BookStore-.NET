@@ -10,6 +10,8 @@ namespace BookStore.Repository.IRepository
         ICategoryRepository Category { get; }
         ICoverType coverType { get; }
         IProductRepository product { get; }
+       ICompanyRepository company { get;}
+        IApplicationUserRepository ApplicationUser { get; }
 
         ISP_Call SP_Call { get; }
         void save();

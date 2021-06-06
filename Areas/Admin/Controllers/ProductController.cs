@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.IO;
 
 namespace BookStore.Areas.Admin.Controllers
 {
@@ -59,34 +60,85 @@ namespace BookStore.Areas.Admin.Controllers
             }
             return View(productVM);
         }
-        //[HttpPost]
-        //public IActionResult Upsert( Product product)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (product.Id == 0)
-        //        {
-        //            iUnitOfWork.product.add(product);
-        //            iUnitOfWork.save();
-        //        } else
-        //        {
-        //            iUnitOfWork.product.Update(product);
-        //            iUnitOfWork.save();
-        //        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Upsert(ProductVM productVM)
+        {
+            if (ModelState.IsValid)
+            {
+                string webRootPath = HostEnvironment.WebRootPath;
+                var files = Request.Form.Files;
+                if (files.Count > 0)
+                {
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(webRootPath, @"images\products");
+                    var extenstion = Path.GetExtension(files[0].FileName);
 
-        //        return RedirectToAction(nameof(Index));
+                    if (productVM.product.ImageUrl != null)
+                    {
+                        //this is an edit and we need to remove old image
+                        var imagePath = Path.Combine(webRootPath, productVM.product.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(imagePath))
+                        {
+                            System.IO.File.Delete(imagePath);
+                        }
+                    }
+                    using (var filesStreams = new FileStream(Path.Combine(uploads, fileName + extenstion), FileMode.Create))
+                    {
+                        files[0].CopyTo(filesStreams);
+                    }
+                    productVM.product.ImageUrl = @"\images\products\" + fileName + extenstion;
+                }
+                else
+                {
+                    //update when they do not change the image
+                    if (productVM.product.Id != 0)
+                    {
+                        Product objFromDb = iUnitOfWork.product.GetT(productVM.product.Id);
+                        productVM.product.ImageUrl = objFromDb.ImageUrl;
+                    }
+                }
 
 
-        //    }
-        //    return NotFound();
-        //}
+                if (productVM.product.Id == 0)
+                {
+                    iUnitOfWork.product.add(productVM.product);
+
+                }
+                else
+                {
+                    iUnitOfWork.product.Update(productVM.product);
+                }
+                iUnitOfWork.save();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                productVM.CategoryList = iUnitOfWork.Category.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                });
+                productVM.CoverList = iUnitOfWork.coverType.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                });
+                if (productVM.product.Id != 0)
+                {
+                    productVM.product = iUnitOfWork.product.GetT(productVM.product.Id);
+                }
+            }
+            return View(productVM);
+        }
+
 
 
         #region Api Calls
         [HttpGet]
         public IActionResult GetAll()
         {
-            var AllObj = iUnitOfWork.product.GetAll();
+            var AllObj = iUnitOfWork.product.GetAll(includeproprites:"Category,CoverType");
             return Ok(new { data = AllObj });
         }
         [HttpDelete]

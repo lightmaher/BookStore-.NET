@@ -19,13 +19,16 @@ namespace BookStore.Repository
             SP_Call = new SP_Call(_db);
             coverType = new CoverTypeRepository(_db);
             product = new ProductRepository(_db);
+            company = new CompanyRepository(_db);
+            ApplicationUser = new ApplicationUserRepository(_db);
         }
         public ICategoryRepository Category { get; private set; }
         public ISP_Call SP_Call { get; private set; }
+        public IApplicationUserRepository ApplicationUser { get; private set; }
 
-     
         public ICoverType coverType { get; private set; }
-        
+        public ICompanyRepository company { get; private set; }
+
 
         public IProductRepository product { get; private set; }
 

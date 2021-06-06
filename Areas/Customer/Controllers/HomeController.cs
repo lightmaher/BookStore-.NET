@@ -1,5 +1,7 @@
 ﻿using BookStore.Models;
+using BookStore.Models.Models;
 using BookStore.Models.ViewModels;
+using BookStore.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,15 +16,18 @@ namespace BookStore.Areas.Customer.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger , IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            this.unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var products = unitOfWork.product.GetAll(includeproprites: "Category,CoverType");
+            return View(products);
         }
 
         public IActionResult Privacy()

@@ -1,6 +1,7 @@
 ﻿using BookStore.DataAccess.Data;
 using BookStore.Models;
 using BookStore.Repository.IRepository;
+using RepositoryGenral.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
