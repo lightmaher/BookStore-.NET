@@ -6,6 +6,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using BookStore.Models;
+using BookStore.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -51,6 +53,12 @@ namespace BookStore.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+            public string Name { get; set; }
+            public string StreetAdress { get; set; }
+            public string City { get; set; }
+            public string State { get; set; }
+            public string PostalCode { get; set; }
+            public string PhoneNumber { get; set; }
         }
 
         public IActionResult OnGetAsync()
@@ -121,11 +129,14 @@ namespace BookStore.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, StreetAdress = Input.StreetAdress, City = Input.City,
+                    PhoneNumber = Input.PhoneNumber, PostalCode = Input.PostalCode, State = Input.State, Name = Input.Name
+                };
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync( user,Sd.Role_User_Indi);
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {

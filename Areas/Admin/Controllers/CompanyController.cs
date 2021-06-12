@@ -1,6 +1,8 @@
 ﻿using BookStore.DataAccess.Migrations;
 using BookStore.Models;
 using BookStore.Repository.IRepository;
+using BookStore.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using System.Threading.Tasks;
 namespace BookStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = Sd.Role_Admin + "," + Sd.Role_Employee)]
 
     public class CompanyController : Controller
     {

@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.Models", "..\Book
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.Utility", "..\BookStore.Utility\BookStore.Utility.csproj", "{FCBEDDD6-6952-4BDD-99D4-6459DBF9DAF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryGenral", "..\RepositoryGenral\RepositoryGenral.csproj", "{D7F6BFCC-3F48-4A5D-A489-89532FC01B34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryGenral", "..\RepositoryGenral\RepositoryGenral.csproj", "{D7F6BFCC-3F48-4A5D-A489-89532FC01B34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

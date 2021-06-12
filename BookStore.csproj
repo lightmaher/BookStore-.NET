@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.90" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.6" />
@@ -18,13 +20,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\BookStore.DataAccess\BookStore.DataAccess.csproj" />
-    <ProjectReference Include="..\BookStore.Models\BookStore.Models.csproj" />
-    <ProjectReference Include="..\BookStore.Utility\BookStore.Utility.csproj" />
-    <ProjectReference Include="..\RepositoryGenral\RepositoryGenral.csproj" />
+    <PackageReference Include="Stripe.net" Version="39.53.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +36,13 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\products\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BookStore.DataAccess\BookStore.DataAccess.csproj" />
+    <ProjectReference Include="..\BookStore.Models\BookStore.Models.csproj" />
+    <ProjectReference Include="..\BookStore.Utility\BookStore.Utility.csproj" />
+    <ProjectReference Include="..\RepositoryGenral\RepositoryGenral.csproj" />
   </ItemGroup>
 
 </Project>

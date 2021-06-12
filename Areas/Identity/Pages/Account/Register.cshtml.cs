@@ -84,11 +84,15 @@ namespace BookStore.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            var input = new InputModel()
+            Input = new InputModel()
             {
                 CompanyList = iunitofwork.company.GetAll().Select(i => new SelectListItem { Text = i.Name, Value = i.Id.ToString() }),
 
-                RolesList = _roleManager.Roles.Where(u => u.Name != Sd.Role_User_Indi).Select(x => x.Name).Select(i => new SelectListItem() { Text = i, Value = i })
+                RolesList = _roleManager.Roles.Where(u => u.Name != Sd.Role_User_Indi).Select(x => x.Name).Select(x => new SelectListItem
+                {
+                    Text = x,
+                    Value = x
+                })
             };
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -137,7 +141,7 @@ namespace BookStore.Areas.Identity.Pages.Account
                         await _userManager.AddToRoleAsync(user, user.Role);
                     }
 
-                    /*  var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                      var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                       code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                       var callbackUrl = Url.Page(
                           "/Account/ConfirmEmail",
@@ -147,7 +151,7 @@ namespace BookStore.Areas.Identity.Pages.Account
 
                       await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                           $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-                    */
+                    
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
@@ -172,6 +176,19 @@ namespace BookStore.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+            Input = new InputModel()
+            {
+                CompanyList = iunitofwork.company.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                }),
+                RolesList = _roleManager.Roles.Where(u => u.Name != Sd.Role_User_Indi).Select(x => x.Name).Select(i => new SelectListItem
+                {
+                    Text = i,
+                    Value = i
+                })
+            };
 
             // If we got this far, something failed, redisplay form
             return Page();

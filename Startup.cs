@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,24 @@ namespace BookStore
             services.AddControllersWithViews();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailSender,EmailSender>();
+            services.Configure<EmailOptions>(Configuration);
+            services.Configure<StripeOptions>(Configuration.GetSection("stripe"));
+            services.AddAuthentication().AddFacebook(x => { x.AppId = "951195032347155"; x.AppSecret = "6e000ba82b5b84632d3f51ba4e9a45ea"; });
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            // bast5dmha 3shan lw fu acion athorized y7olo 3la el login page
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Identity/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,8 +81,12 @@ namespace BookStore
 
             app.UseRouting();
 
+
             app.UseAuthentication();
             app.UseAuthorization();
+            StripeConfiguration.ApiKey = Configuration.GetSection("stripe")["SecretKey"];
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

@@ -10,10 +10,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.IO;
+using BookStore.Utility;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = Sd.Role_Admin )]
+
 
     public class ProductController : Controller
     {
